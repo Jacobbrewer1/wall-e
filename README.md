@@ -2,7 +2,7 @@
 A discord bot.
 
 <a >
-  <img src="https://github.com/Jacobbrewer1/wall-e/blob/main/src/images/WALL-E.png" width="450" />
+  <img src="https://github.com/Jacobbrewer1/wall-e/blob/main/assets/images/WALL-E.png" width="450" />
 </a>
 
 # TODO List
