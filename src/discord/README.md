@@ -1,0 +1,1 @@
+Package primarily for the communication between discord and the bot
