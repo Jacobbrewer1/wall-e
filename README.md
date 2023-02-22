@@ -2,4 +2,4 @@
 A discord bot
 
 # TODO List
-[ ] Decide What the bot will do
+* [ ] Decide What the bot will do
