@@ -1,6 +1,9 @@
-package src
+package main
 
-import "log"
+import (
+	"log"
+	"wall-e/src/discord"
+)
 
 func init() {
 	initLogging()
@@ -11,5 +14,7 @@ func initLogging() {
 }
 
 func main() {
+	discord.NewSession("token here").Start()
 
+	<-make(chan any)
 }
