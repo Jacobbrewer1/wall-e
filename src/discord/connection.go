@@ -47,13 +47,9 @@ func (s *Session) Start() error {
 	go s.heartbeat(h.HeartbeatInterval)
 	go s.listen()
 
-	declarations()
+	s.identify()
 
 	return nil
-}
-
-func declarations() {
-	CurrentSession.identify()
 }
 
 func (s *Session) heartbeat(interval time.Duration) {
