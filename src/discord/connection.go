@@ -10,8 +10,8 @@ import (
 )
 
 type heartbeatOp struct {
-	Op   int   `json:"op"`
-	Data int64 `json:"d"`
+	Op   Opcode `json:"op"`
+	Data int64  `json:"d"`
 }
 
 type helloOp struct {
@@ -47,14 +47,17 @@ func (s *Session) Start() error {
 	go s.heartbeat(h.HeartbeatInterval)
 	go s.listen()
 
-	s.identify()
+	if err := s.identify(); err != nil {
+		s.stop <- struct{}{}
+		return err
+	}
 
 	return nil
 }
 
 func (s *Session) heartbeat(interval time.Duration) {
 	heartbeatJson, _ := json.Marshal(heartbeatOp{
-		Op: 1,
+		Op: OpcodeHeartbeat,
 	})
 
 	ticker := time.NewTicker(interval * time.Millisecond)

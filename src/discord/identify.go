@@ -35,7 +35,7 @@ type GatewayStatusUpdate struct {
 	AFK    bool   `json:"afk"`
 }
 
-func (s *Session) identify() {
+func (s *Session) identify() error {
 	log.Println("identifying")
 
 	op := IdentifyOperation{
@@ -43,13 +43,15 @@ func (s *Session) identify() {
 		Data: s.Identify,
 	}
 
-	data, _ := json.Marshal(op)
+	data, err := json.Marshal(op)
+	if err != nil {
+		return err
+	}
 
 	if err := s.connection.WriteMessage(websocket.TextMessage, data); err != nil {
-		log.Println(err)
-		s.stop <- struct{}{}
-		return
+		return err
 	}
 
 	log.Println("identified")
+	return nil
 }
