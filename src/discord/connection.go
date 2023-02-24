@@ -44,13 +44,15 @@ func (s *Session) Start() error {
 		return err
 	}
 
-	go s.heartbeat(h.HeartbeatInterval)
-	go s.listen()
-
 	if err := s.identify(); err != nil {
 		s.stop <- struct{}{}
 		return err
 	}
+
+	// todo : read initial message here
+
+	go s.heartbeat(h.HeartbeatInterval)
+	go s.listen()
 
 	return nil
 }
