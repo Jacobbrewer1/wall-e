@@ -4,11 +4,10 @@ import (
 	"github.com/Jacobbrewer1/websocket"
 	"runtime"
 	"sync"
+	"wall-e/src/custom"
 )
 
 var CurrentSession *Session
-
-type eventHandler func()
 
 type Session struct {
 	sync.RWMutex
@@ -18,7 +17,7 @@ type Session struct {
 	Identify Identify
 
 	// Event handlers
-	handlers map[EventType]*eventHandler
+	handlers custom.Map[EventType, *HandlerFunc]
 
 	// The websocket connection.
 	connection *websocket.Conn

@@ -19,5 +19,19 @@ func (s *Session) handleMessage() {
 		}
 
 		log.Println(string(msg))
+
+		if event.Type == nil {
+			log.Println("event type is nil, cannot process")
+			continue
+		}
+
+		if !s.handlers.Has(*event.Type) {
+			// handler for event not defined
+			continue
+		}
+
+		handler := *s.handlers[*event.Type]
+		// todo : unmarshal event here and then process into the handler defined above
+		handler(event.RawData)
 	}
 }
