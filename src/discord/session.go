@@ -18,7 +18,7 @@ type Session struct {
 	Identify Identify
 
 	// Event handlers
-	handlers map[EventHandlerType]*eventHandler
+	handlers map[EventType]*eventHandler
 
 	// The websocket connection.
 	connection *websocket.Conn
