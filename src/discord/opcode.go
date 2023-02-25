@@ -23,8 +23,16 @@ func (o *Opcode) UnmarshalText(text []byte) error {
 	return nil
 }
 
+func (o *Opcode) MarshalJSON() (text []byte, err error) {
+	return o.MarshalText()
+}
+
+func (o *Opcode) UnmarshalJSON(text []byte) error {
+	return o.UnmarshalText(text)
+}
+
 func (o *Opcode) MarshalBSON() ([]byte, error) {
-	return []byte(o.String()), nil
+	return o.MarshalText()
 }
 
 func (o *Opcode) UnmarshalBSON(bytes []byte) (err error) {
@@ -50,6 +58,24 @@ func (o *Opcode) Display() string {
 	return displayFormatter(o)
 }
 
+func (o *Opcode) Eqauls(opcode Opcode) custom.Bool {
+	return *o == opcode
+}
+
+func (o *Opcode) IsIn(opcodes ...Opcode) custom.Bool {
+	if opcodes == nil {
+		return false
+	}
+
+	for _, opcode := range opcodes {
+		if o.Eqauls(opcode) {
+			return true
+		}
+	}
+
+	return false
+}
+
 var opcodeMap = custom.Map[string, Opcode]{
 	"DISPATCH":              OpcodeDispatch,
 	"HEARTBEAT":             OpcodeHeartbeat,
@@ -70,7 +96,7 @@ const (
 	OpcodeIdentify
 	OpcodePresenceUpdate
 	OpcodeVoiceStateUpdate
-	OpcodeResume
+	OpcodeResume = iota + 1
 	OpcodeReconnect
 	OpcodeRequestGuildMembers
 	OpcodeInvalidSession
@@ -82,7 +108,7 @@ func OpcodeFromString(text string) (Opcode, error) {
 	parsedStringValue := parseText(text)
 
 	if !opcodeMap.Has(parsedStringValue) {
-		return Opcode(-1), fmt.Errorf(errorTextEnumNotFound, text)
+		return Opcode(-1), fmt.Errorf("opcode: "+errorTextEnumNotFound, text)
 	}
 
 	return *opcodeMap.Get(parsedStringValue), nil

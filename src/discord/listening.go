@@ -1,9 +1,20 @@
 package discord
 
-import "log"
+import (
+	"log"
+)
+
+const (
+	numberOfWorkers    = 5
+	eventChannelBuffer = numberOfWorkers * 5
+)
 
 func (s *Session) listen() {
 	log.Println("listening to new messages")
+
+	for i := 0; i < numberOfWorkers; i++ {
+		go s.handleMessage()
+	}
 
 	for {
 		_, message, err := s.connection.ReadMessage()
@@ -12,15 +23,12 @@ func (s *Session) listen() {
 			return
 		}
 
-		log.Println(string(message))
-
 		select {
-
 		case <-CurrentSession.stop:
 			log.Println("stop message received: stopped listening")
 			return
 		default:
-			//s.onEvent(messageType, message)
+			s.messages <- message
 		}
 	}
 }

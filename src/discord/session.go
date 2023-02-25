@@ -24,10 +24,16 @@ type Session struct {
 	connection *websocket.Conn
 
 	// stop is used to stop the threads that maintain the connection
-	stop chan interface{}
+	stop    chan any
+	errChan chan error
+
+	// messages is a channel that is used to allow for the system to process multiple messages at the same time, concurrency yano
+	messages chan []byte
 
 	// stores session ID of current Gateway connection
 	sessionID string
+
+	resumeGatewayUrl string
 }
 
 func NewSession(token string) *Session {
@@ -39,6 +45,9 @@ func NewSession(token string) *Session {
 			},
 			Intents: IntentsAll,
 		},
+		stop:     make(chan any, 1),
+		errChan:  make(chan error, 1),
+		messages: make(chan []byte, eventChannelBuffer),
 	}
 
 	CurrentSession = s

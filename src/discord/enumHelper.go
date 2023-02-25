@@ -3,7 +3,7 @@ package discord
 import "strings"
 
 func parseText(stringValue string) string {
-	return strings.ToUpper(
+	return strings.ReplaceAll(strings.ToUpper(
 		strings.Join(
 			strings.Split(
 				strings.ReplaceAll(
@@ -13,7 +13,7 @@ func parseText(stringValue string) string {
 					" ", "_"),
 				""),
 			""),
-	)
+	), "\"", "")
 }
 
 func displayFormatter(enum iEnum) (returnText string) {

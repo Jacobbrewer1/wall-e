@@ -14,7 +14,10 @@ func initLogging() {
 }
 
 func main() {
-	discord.NewSession("token here").Start()
+	if err := discord.NewSession("token here").Start(); err != nil {
+		log.Println(err)
+		return
+	}
 
 	<-make(chan any)
 }
