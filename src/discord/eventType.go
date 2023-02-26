@@ -87,7 +87,7 @@ const (
 	EventTypeMessageCreate                   // EventTypeMessageCreate is for when the bot joins a new server
 	EventTypeGuildCreate                     // EventTypeGuildCreate is for when the bot joins a new guild (server). This is also received upon new startups when each guild is made available to the bot
 	EventTypeTypingStart                     // EventTypeTypingStart is used for when a user starts typing
-	EventTypePresenceUpdate                  // EventTypePresenceUpdate is used for when a user updates their profile
+	EventTypePresenceUpdate                  // EventTypePresenceUpdate is their current state on a guild. This event is sent when a user's presence or info, such as name or avatar, is updated.
 )
 
 func EventTypeFromString(text string) (EventType, error) {
