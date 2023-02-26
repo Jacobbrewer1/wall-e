@@ -73,21 +73,23 @@ func (e *EventType) IsIn(eventTypes ...EventType) custom.Bool {
 }
 
 var eventTypeMap = custom.Map[string, EventType]{
-	"HELLO":           EventTypeHello,
-	"READY":           EventTypeReady,
-	"MESSAGE_CREATE":  EventTypeMessageCreate,
-	"GUILD_CREATE":    EventTypeGuildCreate,
-	"TYPING_START":    EventTypeTypingStart,
-	"PRESENCE_UPDATE": EventTypePresenceUpdate,
+	"HELLO":              EventTypeHello,
+	"READY":              EventTypeReady,
+	"MESSAGE_CREATE":     EventTypeMessageCreate,
+	"GUILD_CREATE":       EventTypeGuildCreate,
+	"TYPING_START":       EventTypeTypingStart,
+	"PRESENCE_UPDATE":    EventTypePresenceUpdate,
+	"VOICE_STATE_UPDATE": EventTypeVoiceStateUpdate,
 }
 
 const (
-	EventTypeHello          EventType = iota // EventTypeHello is what is received on connection
-	EventTypeReady                           // EventTypeReady is the initial message that is read from the websocket to justify the identity of the bot
-	EventTypeMessageCreate                   // EventTypeMessageCreate is for when the bot joins a new server
-	EventTypeGuildCreate                     // EventTypeGuildCreate is for when the bot joins a new guild (server). This is also received upon new startups when each guild is made available to the bot
-	EventTypeTypingStart                     // EventTypeTypingStart is used for when a user starts typing
-	EventTypePresenceUpdate                  // EventTypePresenceUpdate is their current state on a guild. This event is sent when a user's presence or info, such as name or avatar, is updated.
+	EventTypeHello            EventType = iota // EventTypeHello is what is received on connection
+	EventTypeReady                             // EventTypeReady is the initial message that is read from the websocket to justify the identity of the bot
+	EventTypeMessageCreate                     // EventTypeMessageCreate is for when the bot joins a new server
+	EventTypeGuildCreate                       // EventTypeGuildCreate is for when the bot joins a new guild (server). This is also received upon new startups when each guild is made available to the bot
+	EventTypeTypingStart                       // EventTypeTypingStart is used for when a user starts typing
+	EventTypePresenceUpdate                    // EventTypePresenceUpdate is their current state on a guild. This event is sent when a user's presence or info, such as name or avatar, is updated.
+	EventTypeVoiceStateUpdate                  // EventTypeVoiceStateUpdate is used for when people join or leave voice channels
 )
 
 func EventTypeFromString(text string) (EventType, error) {

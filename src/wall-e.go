@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"wall-e/src/discord"
 )
@@ -14,7 +15,18 @@ func initLogging() {
 }
 
 func main() {
-	if err := discord.NewSession("token here").Start(); err != nil {
+	bot := discord.NewSession("token here")
+	if err := bot.Start(); err != nil {
+		log.Println(err)
+		return
+	}
+
+	err := bot.SetBotActivity(discord.Activity{
+		Name: fmt.Sprintf("Satisfactory"),
+		Type: discord.ActivityTypeWatching,
+		URL:  "",
+	})
+	if err != nil {
 		log.Println(err)
 		return
 	}

@@ -1,13 +1,12 @@
 package discord
 
 import (
+	"encoding/json"
 	"github.com/Jacobbrewer1/websocket"
 	"runtime"
 	"sync"
 	"wall-e/src/custom"
 )
-
-var CurrentSession *Session
 
 type Session struct {
 	sync.RWMutex
@@ -34,6 +33,26 @@ type Session struct {
 	resumeGatewayUrl string
 }
 
+func (s *Session) SetBotActivity(botActivity Activity) error {
+	data, err := json.Marshal(updateStatusOp{
+		Op: OpcodePresenceUpdate,
+		Data: UpdateStatusData{
+			Activities: []*Activity{
+				&botActivity,
+			},
+		},
+	})
+	if err != nil {
+		return err
+	}
+
+	if err := s.connection.WriteMessage(websocket.TextMessage, data); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func NewSession(token string) *Session {
 	s := &Session{
 		Identify: Identify{
@@ -47,6 +66,5 @@ func NewSession(token string) *Session {
 		messages: make(chan []byte, eventChannelBuffer),
 	}
 
-	CurrentSession = s
 	return s
 }
