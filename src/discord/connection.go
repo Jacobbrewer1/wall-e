@@ -49,7 +49,7 @@ func (s *Session) Start() error {
 	}
 
 	if err := s.identify(); err != nil {
-		s.stop <- struct{}{}
+		s.stop = true
 		return err
 	}
 
@@ -63,7 +63,7 @@ func (s *Session) Start() error {
 	return nil
 }
 
-func (s *Session) resume() {
+func (s *Session) reconnect() {
 	// todo : implement this
 	panic("not implemented yet")
 }
@@ -139,20 +139,23 @@ func (s *Session) heartbeat(interval time.Duration) {
 	defer ticker.Stop()
 
 	for {
+		if s.stop {
+			log.Println("heartbeat: stop received")
+			return
+		}
+
 		select {
 		case <-ticker.C:
 			if err := s.connection.WriteMessage(websocket.TextMessage, heartbeatJson); err != nil {
 				// Most likely connection closed, reconnect
 				log.Println("websocket error:", err)
 				log.Println("reconnecting")
-				s.errChan <- err
+				// todo : reconnect here
+				s.reconnect()
 				return
 			}
 
 			log.Println("ping success")
-		case <-s.stop:
-			log.Println("stop received, stopping heartbeat")
-			return
 		}
 	}
 }

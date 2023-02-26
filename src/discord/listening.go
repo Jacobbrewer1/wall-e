@@ -23,12 +23,11 @@ func (s *Session) listen() {
 			return
 		}
 
-		select {
-		case <-CurrentSession.stop:
-			log.Println("stop message received: stopped listening")
+		if s.stop {
+			log.Println("listen: stop received")
 			return
-		default:
-			s.messages <- message
 		}
+
+		s.messages <- message
 	}
 }

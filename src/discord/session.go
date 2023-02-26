@@ -23,8 +23,7 @@ type Session struct {
 	connection *websocket.Conn
 
 	// stop is used to stop the threads that maintain the connection
-	stop    chan any
-	errChan chan error
+	stop custom.Bool
 
 	// messages is a channel that is used to allow for the system to process multiple messages at the same time, concurrency yano
 	messages chan []byte
@@ -44,8 +43,7 @@ func NewSession(token string) *Session {
 			},
 			Intents: IntentsAll,
 		},
-		stop:     make(chan any, 1),
-		errChan:  make(chan error, 1),
+		stop:     false,
 		messages: make(chan []byte, eventChannelBuffer),
 	}
 
